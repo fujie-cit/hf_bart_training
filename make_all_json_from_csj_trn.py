@@ -779,31 +779,12 @@ def main(trn_file_path, encoding='shift_jis', gap=0.5, max=10.0,):
 import argparse
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Process CSJ TRN files.')
+    parser = argparse.ArgumentParser(description='Convert CSJ TRN files to json format')
     parser.add_argument('trn_top_dir', type=str, help='CSJ TRN top directory')
-    # parser.add_argument('trn_file_path', type=str, help='TRN file path')
-    # parser.add_argument('output_dir', type=str, help='Output directory')
-    # parser.add_argument('mode', choices=['plain', 'kana', 'tokenized_kana', 'tokenized_kana_para'], help='Output mode')
-    # parser.add_argument('--wav_file_path', type=str, default=None, help='WAV file path')
     parser.add_argument('--encoding', type=str, default='shift_jis', help='TRN file encoding')
     parser.add_argument('--gap', type=float, default=0.5, help='Maximum gap between utterances')
     parser.add_argument('--max', type=float, default=10.0, help='Maximum duration for one utterance')
-    # parser.add_argument('--remove_extra_content', action='store_true', default=True, help='Isolate extra content in separate utterances')
-    # parser.add_argument('--isolate_extra_content', action='store_true', default=True, help='Isolate extra content in separate utterances')
-    # parser.add_argument('--para_info', nargs='*', metavar='KEY,VALUE', help='Additional file names for tags')
     args = parser.parse_args()
-
-    # para_info = None
-    # # print(args.para_info)
-    # if args.para_info:
-    #     para_info = {}
-    #     for item in args.para_info:
-    #         key, value = item.split(',')
-    #         para_info[key] = value
-    
-    # kwargs = {}
-    # if para_info is not None:
-    #     kwargs['para_info'] = para_info
 
     import glob
     import os
@@ -812,9 +793,8 @@ if __name__ == "__main__":
     result = []
     generator = tqdm(sorted(glob.glob(os.path.join(args.trn_top_dir, '**', '*.trn'), recursive=True)))
     for trn_file_path in generator:
-        # print(trn_file_path)
         result.extend(main(trn_file_path, encoding=args.encoding, gap=args.gap, max=args.max, ))
         generator.set_postfix({'num': len(result)})
-    # print(result)    
     import json
     json.dump(result, open('all.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+
